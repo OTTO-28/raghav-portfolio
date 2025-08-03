@@ -14,19 +14,34 @@ document.addEventListener('DOMContentLoaded', function() {
         navMenu.classList.remove("active");
     }));
 
-    // Smooth scrolling for anchor links is handled by CSS `scroll-behavior: smooth;`
-    // but this JS can be used for more complex scenarios or fallbacks.
-    
-    // Optional: Change navbar style on scroll
+    // Add scrolled class to navbar
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            navbar.style.backgroundColor = 'rgba(26, 26, 26, 0.9)';
-            navbar.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+            navbar.classList.add('scrolled');
         } else {
-            navbar.style.backgroundColor = 'rgba(26, 26, 26, 0.9)';
-            navbar.style.boxShadow = 'none';
+            navbar.classList.remove('scrolled');
         }
+    });
+
+    // Intersection Observer for scroll animations
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    });
+
+    revealElements.forEach(element => {
+        revealObserver.observe(element);
     });
 
 });
